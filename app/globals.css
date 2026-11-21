@@ -66,6 +66,12 @@ a { color: var(--accent); }
   padding: 16px 12px 28px;
   border-right: 1px solid var(--border);
 }
+.side-course-picker { margin-bottom: 12px; }
+.side-course-label {
+  display: block; margin: 0 2px 6px; font-size: 0.78rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.09em; color: var(--accent);
+}
+.side-course-picker select { cursor: pointer; }
 .side-search input { width: 100%; }
 .side-progress { margin: 14px 2px 4px; }
 .side-progress-label {
