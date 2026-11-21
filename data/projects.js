@@ -1,0 +1,11 @@
+// Portfolio projects — seeded defaults; the Projects tab lets Akhilesh add/edit/delete,
+// with edits kept in the browser (localStorage).
+export const SEED_PROJECTS = [
+        { name: "Akhi's Lab", status: "live", problem: "One home for all preparation — FDE course, system design, interview prep — instead of scattered notes and reels.", stack: "HTML · CSS · JavaScript · StepPlayer", learned: "Build the animation engine once; every lesson after that is just data." },
+        { name: "Ticket Analyzer CLI", status: "live", problem: "A manager with thousands of tickets needs to know what to handle first, in ten seconds.", stack: "Python · JSON · Counter", learned: "Fifteen days of basics were secretly one tool: variables, loops, functions, classes, SQL thinking, tests." },
+        { name: "Support Desk API", status: "building", problem: "The ticket desk as a real multi-user API a customer's own software can call.", stack: "FastAPI · PostgreSQL · JWT · Docker", learned: "Auth + CRUD + a real database turns a script into a product (Module 2, Days 16–30)." },
+        { name: "RAG Chatbot", status: "planned", problem: "Answer support questions from a company's own documents — with sources, not hallucinations.", stack: "Python · Embeddings · Vector DB", learned: "Chunking quality decides RAG quality before the model ever sees the question (Day 39)." },
+        { name: "Autonomous Support Agent", status: "planned", problem: "Resolve L1 tickets end-to-end, escalate the rest, and never break policy.", stack: "Agent loop · Tool calling · Evals · Guardrails", learned: "Trust is a feature: human-in-the-loop gates and an eval report are the demo (Days 52–60)." },
+        { name: "FDE Capstone", status: "planned", problem: "One complete FDE story: discovery → build → deploy → measured ROI, demoed live.", stack: "Everything from Days 1–89", learned: "The portfolio is the proof — 12 projects and one story an interviewer can follow (Day 90)." },
+        { name: "SSAkhi — Cricket Channel", status: "live", problem: "Document the LPCL comeback: district-level cricket in India to league cricket in Texas.", stack: "YouTube · Thumbnails · Match storytelling", learned: "Consistency and packaging beat raw footage — every innings gets its number, score and story." }
+      ];
