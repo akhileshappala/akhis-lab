@@ -8,7 +8,6 @@ import SdExtras from "./SdExtras";
 
 const FDE_KEY = "akhis-lab-done-days";
 const SD_KEY = "akhis-lab-done-sd-lessons";
-const TOTAL = LESSONS.length + SD_LESSONS.length;
 
 function loadDone(key) {
   try {
@@ -55,6 +54,13 @@ export default function CourseShell({ drawerOpen, setDrawerOpen }) {
     setDrawerOpen(false);
   };
 
+  const course = sel.course;
+
+  const switchCourse = (c) => {
+    if (c === course) return;
+    setSel({ course: c, id: c === "fde" ? LESSONS[0].day : SD_LESSONS[0].number });
+  };
+
   const matches = (text) => text.toLowerCase().includes(query.trim().toLowerCase());
   const searching = query.trim().length > 0;
 
@@ -72,8 +78,9 @@ export default function CourseShell({ drawerOpen, setDrawerOpen }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
-  const doneCount = fdeDone.length + sdDone.length;
-  const pct = Math.round((doneCount / TOTAL) * 100);
+  const courseDone = course === "fde" ? fdeDone.length : sdDone.length;
+  const courseTotal = course === "fde" ? LESSONS.length : SD_LESSONS.length;
+  const pct = courseTotal ? Math.round((courseDone / courseTotal) * 100) : 0;
 
   const lesson =
     sel.course === "fde"
@@ -111,10 +118,23 @@ export default function CourseShell({ drawerOpen, setDrawerOpen }) {
       {drawerOpen && <div className="scrim" onClick={() => setDrawerOpen(false)} />}
 
       <aside className={`sidebar${drawerOpen ? " open" : ""}`} aria-label="Course lessons">
+        <div className="side-course-picker">
+          <label className="side-course-label" htmlFor="course-select">Courses</label>
+          <select
+            id="course-select"
+            value={course}
+            onChange={(e) => switchCourse(e.target.value)}
+            aria-label="Choose a course"
+          >
+            <option value="fde">FDE Course</option>
+            <option value="sd">System Design</option>
+          </select>
+        </div>
+
         <div className="side-search">
           <input
             type="search"
-            placeholder="Search lessons in both courses…"
+            placeholder={course === "fde" ? "Search FDE lessons…" : "Search system design lessons…"}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             aria-label="Search lessons"
@@ -124,46 +144,50 @@ export default function CourseShell({ drawerOpen, setDrawerOpen }) {
         <div className="side-progress">
           <div className="side-progress-label">
             <span>Your progress</span>
-            <span>{doneCount} / {TOTAL} lessons</span>
+            <span>{courseDone} / {courseTotal} lessons</span>
           </div>
           <div className="progressbar thin"><div style={{ width: `${pct}%` }} /></div>
         </div>
 
-        <p className="side-course">FDE Course</p>
-        <div className="side-group">
-          <p className="side-group-title">Module 1 — Software Engineering Foundation</p>
-          {fdeList.map((l) => (
-            <button
-              key={l.day}
-              className={`side-row${sel.course === "fde" && sel.id === l.day ? " active" : ""}`}
-              onClick={() => pick("fde", l.day)}
-            >
-              <span className="side-num">{l.day}</span>
-              <span className="side-row-title">{l.title}</span>
-              {fdeDone.includes(l.day) && <span className="side-check" aria-label="Completed">✓</span>}
-            </button>
-          ))}
-          {searching && fdeList.length === 0 && <p className="side-empty">No FDE lessons match.</p>}
-        </div>
-        {!searching && MODULES.map((m) => roadmapGroup(m.name, m.range, m.items))}
-
-        <p className="side-course">System Design</p>
-        <div className="side-group">
-          <p className="side-group-title">Module 1 — Foundations of Scale</p>
-          {sdList.map((l) => (
-            <button
-              key={l.id}
-              className={`side-row${sel.course === "sd" && sel.id === l.number ? " active" : ""}`}
-              onClick={() => pick("sd", l.number)}
-            >
-              <span className="side-num">{l.number}</span>
-              <span className="side-row-title">{l.title}</span>
-              {sdDone.includes(l.number) && <span className="side-check" aria-label="Completed">✓</span>}
-            </button>
-          ))}
-          {searching && sdList.length === 0 && <p className="side-empty">No system design lessons match.</p>}
-        </div>
-        {!searching && SD_ROADMAP.slice(1).map((m) => roadmapGroup(m.name, "Roadmap", m.lessons))}
+        {course === "fde" ? (
+          <>
+            <div className="side-group">
+              <p className="side-group-title">Module 1 — Software Engineering Foundation</p>
+              {fdeList.map((l) => (
+                <button
+                  key={l.day}
+                  className={`side-row${sel.course === "fde" && sel.id === l.day ? " active" : ""}`}
+                  onClick={() => pick("fde", l.day)}
+                >
+                  <span className="side-num">{l.day}</span>
+                  <span className="side-row-title">{l.title}</span>
+                  {fdeDone.includes(l.day) && <span className="side-check" aria-label="Completed">✓</span>}
+                </button>
+              ))}
+              {searching && fdeList.length === 0 && <p className="side-empty">No FDE lessons match.</p>}
+            </div>
+            {!searching && MODULES.map((m) => roadmapGroup(m.name, m.range, m.items))}
+          </>
+        ) : (
+          <>
+            <div className="side-group">
+              <p className="side-group-title">Module 1 — Foundations of Scale</p>
+              {sdList.map((l) => (
+                <button
+                  key={l.id}
+                  className={`side-row${sel.course === "sd" && sel.id === l.number ? " active" : ""}`}
+                  onClick={() => pick("sd", l.number)}
+                >
+                  <span className="side-num">{l.number}</span>
+                  <span className="side-row-title">{l.title}</span>
+                  {sdDone.includes(l.number) && <span className="side-check" aria-label="Completed">✓</span>}
+                </button>
+              ))}
+              {searching && sdList.length === 0 && <p className="side-empty">No system design lessons match.</p>}
+            </div>
+            {!searching && SD_ROADMAP.slice(1).map((m) => roadmapGroup(m.name, "Roadmap", m.lessons))}
+          </>
+        )}
       </aside>
 
       <div className="lesson-main">
